@@ -1,4 +1,4 @@
-import type { Country } from './types';
+import type { Country } from './types.ts';
 
 export const TIME_PER_QUESTION = 15;
 export const OPTIONS_PER_QUESTION = 4;

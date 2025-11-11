@@ -1,6 +1,6 @@
 import React from 'react';
-import type { Country } from '../types';
-import { GameState } from '../types';
+import type { Country } from '../types.ts';
+import { GameState } from '../types.ts';
 
 interface OptionsProps {
   options: Country[];

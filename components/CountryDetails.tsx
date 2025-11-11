@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Country } from '../types';
+import type { Country } from '../types.ts';
 
 interface CountryDetailsProps {
   country: Country;

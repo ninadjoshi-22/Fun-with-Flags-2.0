@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { GoogleGenAI, Type } from '@google/genai';
-import type { Country } from './types';
-import { GameState } from './types';
-import { COUNTRIES, OPTIONS_PER_QUESTION, TIME_PER_QUESTION } from './constants';
-import Scoreboard from './components/Scoreboard';
-import Flag from './components/Flag';
-import Options from './components/Options';
-import FinalScore from './components/FinalScore';
-import CountryDetails from './components/CountryDetails';
-import Timer from './components/Timer';
+import type { Country } from './types.ts';
+import { GameState } from './types.ts';
+import { COUNTRIES, OPTIONS_PER_QUESTION, TIME_PER_QUESTION } from './constants.ts';
+import Scoreboard from './components/Scoreboard.js';
+import Flag from './components/Flag.js';
+import Options from './components/Options.js';
+import FinalScore from './components/FinalScore.js';
+import CountryDetails from './components/CountryDetails.js';
+import Timer from './components/Timer.js';
 
 // Helper function to shuffle an array
 const shuffleArray = <T,>(array: T[]): T[] => {
