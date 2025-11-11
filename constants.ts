@@ -1,7 +1,6 @@
-
 import type { Country } from './types';
 
-export const QUESTIONS_PER_GAME = 10;
+export const TIME_PER_QUESTION = 15;
 export const OPTIONS_PER_QUESTION = 4;
 
 export const COUNTRIES: Country[] = [
