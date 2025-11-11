@@ -26,6 +26,8 @@ function App() {
   // Timer-related state
   const [timeLeft, setTimeLeft] = useState(TIME_PER_QUESTION);
   const timerRef = useRef<number | null>(null);
+  const previousCorrectAnswerCode = useRef<string | null>(null);
+
 
   // Hint-related state
   const [hintsRemaining, setHintsRemaining] = useState(3);
@@ -49,8 +51,9 @@ function App() {
     let newCorrectAnswer;
     do {
       newCorrectAnswer = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
-    } while (newCorrectAnswer.code === correctAnswer?.code);
+    } while (newCorrectAnswer.code === previousCorrectAnswerCode.current);
     
+    previousCorrectAnswerCode.current = newCorrectAnswer.code;
     setCorrectAnswer(newCorrectAnswer);
 
     const wrongOptions = shuffleArray(COUNTRIES.filter(c => c.code !== newCorrectAnswer.code))
@@ -67,7 +70,7 @@ function App() {
     setIsDetailsLoading(false);
     setTimeLeft(TIME_PER_QUESTION);
     setGameState(GameState.Playing);
-  }, [correctAnswer]);
+  }, []);
 
   const setupGame = useCallback(() => {
     setScore(0);
@@ -75,13 +78,14 @@ function App() {
     setHintsRemaining(3);
     setCountryDetails(null);
     setIsDetailsLoading(false);
+    previousCorrectAnswerCode.current = null;
     generateQuestion();
   }, [generateQuestion]);
   
   // Initial game setup
   useEffect(() => {
     setupGame();
-  }, []); // Note: setupGame is not a dependency to prevent re-running on every render
+  }, [setupGame]);
 
   // Timer logic
   useEffect(() => {
@@ -139,6 +143,7 @@ function App() {
   };
 
   const handleNextQuestion = useCallback(() => {
+    setGameState(GameState.Playing);
     setQuestionNumber(prev => prev + 1);
     generateQuestion();
   }, [generateQuestion]);
@@ -150,7 +155,7 @@ function App() {
     setSelectedAnswer(selected);
     setGameState(GameState.Answered);
 
-    if (selected.code === correctAnswer?.code) {
+    if (correctAnswer && selected.code === correctAnswer.code) {
       setScore(prev => prev + 1);
       fetchCountryDetails(correctAnswer);
     } else {
