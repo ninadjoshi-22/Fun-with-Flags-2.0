@@ -26,6 +26,7 @@ function App() {
   // Timer-related state
   const [timeLeft, setTimeLeft] = useState(TIME_PER_QUESTION);
   const timerRef = useRef<number | null>(null);
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
   const previousCorrectAnswerCode = useRef<string | null>(null);
 
 
@@ -69,6 +70,7 @@ function App() {
     setCountryDetails(null);
     setIsDetailsLoading(false);
     setTimeLeft(TIME_PER_QUESTION);
+    setIsTimerPaused(false); // Ensure timer is not paused for new question
     setGameState(GameState.Playing);
   }, []);
 
@@ -89,7 +91,7 @@ function App() {
 
   // Timer logic
   useEffect(() => {
-    if (gameState === GameState.Playing) {
+    if (gameState === GameState.Playing && !isTimerPaused) {
       timerRef.current = window.setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -104,7 +106,7 @@ function App() {
       clearTimer();
     }
     return () => clearTimer();
-  }, [gameState, clearTimer]);
+  }, [gameState, isTimerPaused, clearTimer]);
 
 
   const fetchCountryDetails = async (country: Country) => {
@@ -169,6 +171,7 @@ function App() {
   const handleGetHint = async () => {
     if (hintsRemaining <= 0 || isHintUsed || !correctAnswer || isHintLoading) return;
 
+    setIsTimerPaused(true);
     setIsHintLoading(true);
     setHintsRemaining(prev => prev - 1);
     setIsHintUsed(true);
@@ -185,6 +188,7 @@ function App() {
       setHint("Sorry, couldn't get a hint right now.");
     } finally {
       setIsHintLoading(false);
+      setIsTimerPaused(false);
     }
   };
 
